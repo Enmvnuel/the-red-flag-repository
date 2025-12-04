@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Flag, Upload, X, AlertCircle, CheckCircle2 } from "lucide-react";
+import { Flag, FileUp, X, AlertCircle, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 
 export default function DenouncePage() {
@@ -40,7 +40,7 @@ export default function DenouncePage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 px-6 py-12">
+    <div className="min-h-screen bg-slate-50 px-6 py-12 bg-grid-pattern">
       <div className="mx-auto max-w-3xl">
         <div className="mb-10 text-center">
           <div className="mb-4 inline-flex items-center justify-center rounded-full bg-rose-100 p-3 text-rose-600">
@@ -54,7 +54,7 @@ export default function DenouncePage() {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-xl shadow-slate-200/50 sm:p-10">
+        <form onSubmit={handleSubmit} className="rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-xl shadow-slate-200/50 backdrop-blur-md sm:p-10">
           <div className="space-y-8">
             {/* Personal Info Section */}
             <div className="space-y-6">
@@ -193,7 +193,7 @@ export default function DenouncePage() {
                     className="group flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 px-6 py-10 transition-all hover:border-rose-500 hover:bg-rose-50"
                   >
                     <div className="rounded-full bg-white p-3 shadow-sm ring-1 ring-slate-200 transition-all group-hover:ring-rose-200">
-                      <Upload className="h-6 w-6 text-slate-400 group-hover:text-rose-500" />
+                      <FileUp className="h-6 w-6 text-slate-400 group-hover:text-rose-500" />
                     </div>
                     <div className="text-center">
                       <span className="text-sm font-medium text-slate-700 group-hover:text-rose-700">

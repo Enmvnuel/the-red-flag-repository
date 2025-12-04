@@ -1,4 +1,5 @@
 import { AlertTriangle, Heart } from "lucide-react";
+import Link from "next/link";
 
 export default function Footer() {
   return (
@@ -18,9 +19,21 @@ export default function Footer() {
           <div>
             <h3 className="font-semibold text-slate-900">Legal</h3>
             <ul className="mt-3 space-y-2 text-sm text-slate-600">
-              <li>Términos y Condiciones</li>
-              <li>Política de Privacidad</li>
-              <li>Código de Conducta</li>
+              <li>
+                <Link href="/terminos" className="hover:text-rose-600 transition-colors">
+                  Términos y Condiciones
+                </Link>
+              </li>
+              <li>
+                <Link href="/privacidad" className="hover:text-rose-600 transition-colors">
+                  Política de Privacidad
+                </Link>
+              </li>
+              <li>
+                <Link href="/conducta" className="hover:text-rose-600 transition-colors">
+                  Código de Conducta
+                </Link>
+              </li>
             </ul>
           </div>
 

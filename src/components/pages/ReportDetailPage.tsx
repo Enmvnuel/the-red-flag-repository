@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, MapPin, Calendar, AlertTriangle, User, Flag, Share2, ShieldAlert } from "lucide-react";
+import { ArrowLeft, MapPin, Calendar, AlertTriangle, User, Flag, Share2, ShieldAlert, FileText } from "lucide-react";
 
 const mockReporte = {
   id: "1",
@@ -26,7 +26,7 @@ export default function ReportDetailPage() {
   const params = useParams();
 
   return (
-    <div className="min-h-screen bg-slate-50 px-6 py-12">
+    <div className="min-h-screen bg-slate-50 px-6 py-12 bg-grid-pattern">
       <div className="mx-auto max-w-4xl">
         <Link
           href="/buscar"
@@ -36,7 +36,7 @@ export default function ReportDetailPage() {
           Volver a búsqueda
         </Link>
 
-        <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl shadow-slate-200/50">
+        <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white/90 shadow-2xl shadow-slate-200/50 backdrop-blur-md">
           {/* Header Section */}
           <div className="relative bg-slate-900 px-8 py-12 text-white overflow-hidden">
             <div className="absolute inset-0 opacity-20">
@@ -46,7 +46,7 @@ export default function ReportDetailPage() {
 
             <div className="relative z-10">
               <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-rose-500/20 px-4 py-1.5 text-sm font-medium text-rose-200 ring-1 ring-inset ring-rose-500/40 backdrop-blur-sm">
-                <AlertTriangle className="h-4 w-4" />
+                <ShieldAlert className="h-4 w-4" />
                 <span>{mockReporte.denuncias} denuncias verificadas</span>
               </div>
 
@@ -113,7 +113,7 @@ export default function ReportDetailPage() {
                       className="flex items-start gap-4 rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:border-rose-200 hover:shadow-md"
                     >
                       <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-rose-100 text-xs font-bold text-rose-600">
-                        {index + 1}
+                        <FileText className="h-3 w-3" />
                       </div>
                       <p className="font-medium text-slate-700">{evidencia}</p>
                     </div>
