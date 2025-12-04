@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { AlertTriangle, Search, Flag, Menu, X } from "lucide-react";
+import { AlertTriangle, Search, Flag, Menu, X, Map } from "lucide-react";
 import { useState } from "react";
 
 export default function Header() {
@@ -27,6 +27,13 @@ export default function Header() {
             className="text-slate-600 transition-colors hover:text-rose-600 font-medium"
           >
             Mujeres
+          </Link>
+          <Link
+            href="/mapa"
+            className="flex items-center gap-2 text-slate-600 transition-colors hover:text-rose-600 font-medium"
+          >
+            <Map className="h-5 w-5" />
+            <span>Mapa</span>
           </Link>
           <Link
             href="/buscar"
@@ -68,6 +75,14 @@ export default function Header() {
               className="text-slate-600 transition-colors hover:text-rose-600 font-medium"
             >
               Mujeres
+            </Link>
+            <Link
+              href="/mapa"
+              onClick={() => setMenuOpen(false)}
+              className="flex items-center gap-2 text-slate-600 transition-colors hover:text-rose-600 font-medium"
+            >
+              <Map className="h-5 w-5" />
+              <span>Mapa</span>
             </Link>
             <Link
               href="/buscar"
