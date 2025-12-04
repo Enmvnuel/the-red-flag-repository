@@ -4,9 +4,9 @@ export default function Footer() {
   return (
     <footer className="w-full border-t border-slate-200 bg-slate-50">
       <div className="mx-auto max-w-7xl px-6 py-12">
-        <div className="grid gap-8 md:grid-cols-3">
+        <div className="grid gap-8 text-center md:grid-cols-3">
           <div>
-            <div className="flex items-center gap-2 text-xl font-bold text-rose-600">
+            <div className="flex items-center justify-center gap-2 text-xl font-bold text-rose-600">
               <AlertTriangle className="h-6 w-6" />
               <span>Red Flag</span>
             </div>
