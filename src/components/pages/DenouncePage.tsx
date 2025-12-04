@@ -4,12 +4,40 @@ import { useState } from "react";
 import { Flag, Upload, X, AlertCircle, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 
+const DEPARTAMENTOS = [
+  "Amazonas",
+  "Áncash",
+  "Apurímac",
+  "Arequipa",
+  "Ayacucho",
+  "Cajamarca",
+  "Callao",
+  "Cusco",
+  "Huancavelica",
+  "Huánuco",
+  "Ica",
+  "Junín",
+  "La Libertad",
+  "Lambayeque",
+  "Lima",
+  "Loreto",
+  "Madre de Dios",
+  "Moquegua",
+  "Pasco",
+  "Piura",
+  "Puno",
+  "San Martín",
+  "Tacna",
+  "Tumbes",
+  "Ucayali",
+];
+
 export default function DenouncePage() {
   const [formData, setFormData] = useState({
     nombreDenunciado: "",
     apellidoDenunciado: "",
     edad: "",
-    ciudad: "",
+    departamento: "",
     genero: "",
     redSocial: "",
     descripcion: "",
@@ -62,7 +90,7 @@ export default function DenouncePage() {
                 <span className="flex h-6 w-6 items-center justify-center rounded-full bg-rose-600 text-xs text-white">1</span>
                 Información del Denunciado
               </h3>
-              
+
               <div className="grid gap-6 sm:grid-cols-2">
                 <div>
                   <label htmlFor="nombreDenunciado" className="mb-2 block text-sm font-semibold text-slate-700">
@@ -129,18 +157,23 @@ export default function DenouncePage() {
                 </div>
 
                 <div>
-                  <label htmlFor="ciudad" className="mb-2 block text-sm font-semibold text-slate-700">
-                    Ciudad
+                  <label htmlFor="departamento" className="mb-2 block text-sm font-semibold text-slate-700">
+                    Departamento
                   </label>
-                  <input
-                    type="text"
-                    id="ciudad"
+                  <select
+                    id="departamento"
                     required
-                    value={formData.ciudad}
-                    onChange={(e) => setFormData({ ...formData, ciudad: e.target.value })}
-                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 focus:border-rose-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-rose-500/20 transition-all"
-                    placeholder="Lima"
-                  />
+                    value={formData.departamento}
+                    onChange={(e) => setFormData({ ...formData, departamento: e.target.value })}
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 focus:border-rose-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-rose-500/20 transition-all"
+                  >
+                    <option value="">Seleccionar</option>
+                    {DEPARTAMENTOS.map((dep) => (
+                      <option key={dep} value={dep}>
+                        {dep}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
 
