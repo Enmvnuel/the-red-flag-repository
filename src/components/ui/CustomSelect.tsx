@@ -32,7 +32,6 @@ export default function CustomSelect({
 
     const selectedOption = options.find((opt) => opt.value === value);
 
-    // Close when clicking outside
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
