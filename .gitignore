@@ -40,3 +40,16 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 node_modules
+
+# local env files
+.env*.local
+
+# databases (if you use sqlite)
+*.db
+*.sqlite
+*.sqlite3
+
+# os
+.DS_Store
+Thumbs.db
+Desktop.ini
