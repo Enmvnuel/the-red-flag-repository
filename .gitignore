@@ -49,10 +49,6 @@ node_modules
 *.sqlite
 *.sqlite3
 
-# prisma
-/prisma/.env
-/prisma/migrations/**/migration.sql
-
 # bun
 bun.lockb
 

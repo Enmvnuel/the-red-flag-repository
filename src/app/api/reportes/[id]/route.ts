@@ -4,10 +4,11 @@ import { getReportePorId, actualizarReporte, eliminarReporte } from '@/lib/queri
 // GET /api/reportes/[id] - Obtener un reporte específico
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const reporte = await getReportePorId(params.id)
+    const { id } = await params
+    const reporte = await getReportePorId(id)
 
     if (!reporte) {
       return NextResponse.json(
@@ -29,11 +30,12 @@ export async function GET(
 // PATCH /api/reportes/[id] - Actualizar un reporte
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const body = await request.json()
-    const reporte = await actualizarReporte(params.id, body)
+    const reporte = await actualizarReporte(id, body)
 
     return NextResponse.json(reporte)
   } catch (error) {
@@ -44,14 +46,14 @@ export async function PATCH(
     )
   }
 }
-
 // DELETE /api/reportes/[id] - Eliminar un reporte
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    await eliminarReporte(params.id)
+    const { id } = await params
+    await eliminarReporte(id)
 
     return NextResponse.json({ message: 'Reporte eliminado exitosamente' })
   } catch (error) {
