@@ -21,8 +21,8 @@ Plataforma web para reportar y consultar comportamientos inapropiados en relacio
 - **Frontend:** Next.js 16, React 19, TypeScript
 - **Styling:** Tailwind CSS 4
 - **Animaciones:** Framer Motion
-- **Base de Datos:** Amazon Aurora PostgreSQL
-- **ORM:** Prisma
+- **Base de Datos:** Amazon RDS PostgreSQL
+- **Driver:** node-postgres (pg)
 - **Runtime:** Bun
 - **Iconos:** Lucide React
 
@@ -42,23 +42,22 @@ bun run dev
 
 Abre [http://localhost:3000](http://localhost:3000)
 
-### Con Base de Datos Amazon Aurora
+### Con Base de Datos Amazon RDS PostgreSQL
 
-👉 **Ver guía completa:** [DATABASE_README.md](./DATABASE_README.md)
+👉 **Ver guía completa:** [RDS_SETUP.md](./RDS_SETUP.md)
 
 **Pasos rápidos:**
 
 ```bash
 # 1. Configurar variables de entorno
 cp .env.example .env.local
-# Editar .env.local con tus credenciales de Aurora
+# Editar .env.local con tus credenciales de RDS
 
 # 2. Instalar dependencias
 bun install
 
-# 3. Configurar base de datos
-bun run db:generate
-bun run db:migrate
+# 3. Inicializar base de datos
+bun run db:init
 
 # 4. [Opcional] Agregar datos de ejemplo
 bun run db:seed
@@ -71,9 +70,7 @@ bun run dev
 
 ## 📚 Documentación
 
-- 📖 [**DATABASE_README.md**](./DATABASE_README.md) - Resumen de la configuración de BD
-- 📘 [**AURORA_SETUP.md**](./AURORA_SETUP.md) - Guía completa de Amazon Aurora (50+ páginas)
-- ⚡ [**QUICK_START.md**](./QUICK_START.md) - Inicio rápido en 5 minutos
+- 📖 [**RDS_SETUP.md**](./RDS_SETUP.md) - Guía completa de configuración de Amazon RDS PostgreSQL
 
 ---
 
@@ -95,12 +92,12 @@ the-red-flag-repository/
 │   │   ├── pages/           # Componentes de página
 │   │   └── ui/              # Componentes UI
 │   ├── lib/                 # Utilidades
-│   │   ├── db.ts           # Cliente Prisma
+│   │   ├── db.ts           # Pool de conexiones PostgreSQL
 │   │   └── queries.ts      # Funciones de BD
 │   ├── types/              # Tipos TypeScript
 │   └── scripts/            # Scripts de utilidad
-├── prisma/
-│   ├── schema.prisma       # Schema de BD
+├── src/db/
+│   ├── init.ts             # Inicializar tablas
 │   └── seed.ts             # Datos de ejemplo
 ├── public/                 # Archivos estáticos
 └── ...
@@ -154,11 +151,8 @@ bun run build        # Build optimizado
 bun run start        # Servidor de producción
 
 # Base de Datos
-bun run db:generate  # Generar Prisma Client
-bun run db:migrate   # Aplicar migraciones
-bun run db:studio    # Abrir GUI de BD
-bun run db:seed      # Poblar con datos
-bun run db:deploy    # Deploy migraciones
+bun run db:init      # Inicializar tablas e índices
+bun run db:seed      # Poblar con datos de ejemplo
 
 # Testing
 bun src/scripts/test-db.ts  # Probar conexión BD
@@ -189,8 +183,8 @@ bun run lint         # Ejecutar ESLint
 Crea un archivo `.env.local`:
 
 ```env
-# Base de datos (Amazon Aurora PostgreSQL)
-DATABASE_URL="postgresql://username:password@endpoint:5432/database?schema=public"
+# Base de datos (Amazon RDS PostgreSQL)
+DATABASE_URL="postgresql://username:password@endpoint.rds.amazonaws.com:5432/database"
 
 # App
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
