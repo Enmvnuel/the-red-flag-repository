@@ -217,3 +217,5 @@ Ver [RDS_SETUP.md](./RDS_SETUP.md) para guía completa de configuración.
 **Fecha de migración:** Diciembre 2025
 **De:** Prisma ORM + Amazon Aurora PostgreSQL
 **A:** node-postgres (pg) + Amazon RDS PostgreSQL
+
+zz
