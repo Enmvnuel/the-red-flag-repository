@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "bun --bun next dev",
-    "build": "bun --bun next build",
-    "start": "bun --bun next start",
+    "build": "next build",
+    "start": "next start",
     "lint": "eslint",
     "db:init": "bun src/db/init.ts",
     "db:seed": "bun src/db/seed.ts"
