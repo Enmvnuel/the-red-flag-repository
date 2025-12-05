@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
@@ -32,6 +33,11 @@ export default function RootLayout({
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
+        <Script
+          src="https://richinfo.co/richpartners/in-page/js/richads-ob.js?pubid=995190&siteid=380083"
+          strategy="afterInteractive"
+          async
+        />
       </body>
     </html>
   );

@@ -49,6 +49,13 @@ node_modules
 *.sqlite
 *.sqlite3
 
+# prisma
+/prisma/.env
+/prisma/migrations/**/migration.sql
+
+# bun
+bun.lockb
+
 # os
 .DS_Store
 Thumbs.db
