@@ -52,12 +52,13 @@ jobs:
           cache-from: type=gha 
 
       # Paso 6: Despliegue Continuo (CD) - Notificación a Dokploy
-      - name: Notificar a Dokploy para Iniciar Despliegue
+      - name: Activar Despliegue Continuo en Dokploy
+        # Se establece el Webhook URL como variable de entorno usando el Secret
+        env:
+          DOKPLOY_WEBHOOK_URL: ${{ secrets.DOKPLOY_WEBHOOK_URL }}
         run: |
-          echo "Nueva imagen subida: ${{ steps.image.outputs.IMAGE_TAG }}"
-          # --------------------------------------------------------------------
-          # Aquí se debe colocar el comando para activar el despliegue en Dokploy.
-          # Esto generalmente es una llamada a un Webhook o una API.
-          # Ejemplo (Dokploy podría requerir un curl con un token y el nuevo SHA):
-          # curl -X POST "https://dokploy.tu-dominio.com/api/deploy?token=SECRET_TOKEN&tag=${{ github.sha }}"
-          # --------------------------------------------------------------------
+          echo "Iniciando despliegue de imagen: ${{ steps.image.outputs.IMAGE_TAG }}"
+          
+          # Se usa 'curl' para enviar una solicitud POST al Webhook.
+          # Los Webhooks de despliegue a menudo requieren un método POST.
+          curl -X POST $DOKPLOY_WEBHOOK_URL
