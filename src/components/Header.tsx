@@ -20,7 +20,7 @@ export default function Header() {
             href="/hombres"
             className="text-slate-600 transition-colors hover:text-rose-600 font-medium"
           >
-            Hombres
+            HOMBRESSSSSSSS
           </Link>
           <Link
             href="/mujeres"
