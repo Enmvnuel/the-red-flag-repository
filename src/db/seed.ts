@@ -1,123 +1,80 @@
-import { pool } from '@/lib/db'
+import { Pool } from 'pg'
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }
+})
 
 async function seed() {
   const client = await pool.connect()
   
   try {
-    console.log('🌱 Sembrando datos de ejemplo...')
+    console.log('🌱 Insertando datos de prueba...')
 
-    // Limpiar datos existentes (opcional)
-    // await client.query('TRUNCATE reportes, busquedas, estadisticas_ciudad CASCADE')
+    // Limpiar datos existentes
+    await client.query('DELETE FROM reportes')
 
-    // Insertar reportes de ejemplo
+    // Insertar reportes con distribución por género
     const reportes = [
-      {
-        nombre: 'Juan',
-        apellido: 'Pérez',
-        edad: 28,
-        ciudad: 'Lima',
-        genero: 'hombre',
-        descripcion: 'Comportamiento agresivo y manipulador. Múltiples denuncias por violencia psicológica.',
-        denuncias: 3,
-        redSocial: '@juanperez'
-      },
-      {
-        nombre: 'María',
-        apellido: 'González',
-        edad: 32,
-        ciudad: 'Arequipa',
-        genero: 'mujer',
-        descripcion: 'Comportamiento tóxico y controlador. Reportes de acoso constante.',
-        denuncias: 2,
-        redSocial: null
-      },
-      {
-        nombre: 'Carlos',
-        apellido: 'Rodríguez',
-        edad: 35,
-        ciudad: 'Cusco',
-        genero: 'hombre',
-        descripcion: 'Múltiples relaciones simultáneas sin consentimiento. Mentiras compulsivas.',
-        denuncias: 5,
-        redSocial: '@crodriguez'
-      },
-      {
-        nombre: 'Ana',
-        apellido: 'Martínez',
-        edad: 26,
-        ciudad: 'Trujillo',
-        genero: 'mujer',
-        descripcion: 'Comportamiento manipulador y gaslighting. Varias denuncias por abuso emocional.',
-        denuncias: 4,
-        redSocial: null
-      },
-      {
-        nombre: 'Diego',
-        apellido: 'Sánchez',
-        edad: 30,
-        ciudad: 'Lima',
-        genero: 'hombre',
-        descripcion: 'Infidelidad reiterada y falta de compromiso emocional.',
-        denuncias: 2,
-        redSocial: '@diegosanchez'
-      },
-      {
-        nombre: 'Lucía',
-        apellido: 'Torres',
-        edad: 29,
-        ciudad: 'Piura',
-        genero: 'mujer',
-        descripcion: 'Comportamiento violento y agresivo. Múltiples denuncias por violencia física.',
-        denuncias: 6,
-        redSocial: null
-      },
-      {
-        nombre: 'Roberto',
-        apellido: 'Flores',
-        edad: 40,
-        ciudad: 'Lima',
-        genero: 'hombre',
-        descripcion: 'Acoso persistente después de la ruptura. Comportamiento obsesivo.',
-        denuncias: 3,
-        redSocial: '@rflores'
-      },
-      {
-        nombre: 'Patricia',
-        apellido: 'Vargas',
-        edad: 27,
-        ciudad: 'Chiclayo',
-        genero: 'mujer',
-        descripcion: 'Mentiras constantes y manipulación emocional.',
-        denuncias: 2,
-        redSocial: null
-      },
-      {
-        nombre: 'Miguel',
-        apellido: 'Castro',
-        edad: 33,
-        ciudad: 'Lima',
-        genero: 'hombre',
-        descripcion: 'Infidelidad y comportamiento narcisista. Varias denuncias.',
-        denuncias: 4,
-        redSocial: '@mcastro'
-      },
-      {
-        nombre: 'Elena',
-        apellido: 'Ramos',
-        edad: 31,
-        ciudad: 'Ica',
-        genero: 'mujer',
-        descripcion: 'Comportamiento controlador y celos excesivos.',
-        denuncias: 3,
-        redSocial: null
-      }
+      // Lima - mayoría mujeres (7 mujeres, 3 hombres)
+      { nombre: 'María', apellido: 'García', edad: 28, ciudad: 'Lima', genero: 'mujer', descripcion: 'Infidelidad comprobada', denuncias: 2 },
+      { nombre: 'Ana', apellido: 'López', edad: 32, ciudad: 'Lima', genero: 'mujer', descripcion: 'Engaño confirmado', denuncias: 1 },
+      { nombre: 'Carlos', apellido: 'Pérez', edad: 35, ciudad: 'Lima', genero: 'hombre', descripcion: 'Infiel serial', denuncias: 3 },
+      { nombre: 'Laura', apellido: 'Martínez', edad: 29, ciudad: 'Lima', genero: 'mujer', descripcion: 'Doble vida', denuncias: 2 },
+      { nombre: 'Rosa', apellido: 'Fernández', edad: 26, ciudad: 'Lima', genero: 'mujer', descripcion: 'Infidelidad', denuncias: 1 },
+      { nombre: 'Pedro', apellido: 'Sánchez', edad: 31, ciudad: 'Lima', genero: 'hombre', descripcion: 'Engaño', denuncias: 1 },
+      { nombre: 'Sofía', apellido: 'Torres', edad: 27, ciudad: 'Lima', genero: 'mujer', descripcion: 'Infiel', denuncias: 2 },
+      { nombre: 'Carmen', apellido: 'Díaz', edad: 30, ciudad: 'Lima', genero: 'mujer', descripcion: 'Infidelidad', denuncias: 1 },
+      { nombre: 'Jorge', apellido: 'Ramírez', edad: 33, ciudad: 'Lima', genero: 'hombre', descripcion: 'Engaño', denuncias: 2 },
+      { nombre: 'Patricia', apellido: 'Vega', edad: 28, ciudad: 'Lima', genero: 'mujer', descripcion: 'Infiel', denuncias: 1 },
+
+      // Arequipa - mayoría mujeres (4 mujeres, 1 hombre)
+      { nombre: 'Diana', apellido: 'Cruz', edad: 29, ciudad: 'Arequipa', genero: 'mujer', descripcion: 'Infidelidad', denuncias: 1 },
+      { nombre: 'Elena', apellido: 'Silva', edad: 31, ciudad: 'Arequipa', genero: 'mujer', descripcion: 'Engaño', denuncias: 2 },
+      { nombre: 'Roberto', apellido: 'Flores', edad: 34, ciudad: 'Arequipa', genero: 'hombre', descripcion: 'Infiel', denuncias: 1 },
+      { nombre: 'Valentina', apellido: 'Rojas', edad: 27, ciudad: 'Arequipa', genero: 'mujer', descripcion: 'Infidelidad', denuncias: 1 },
+      { nombre: 'Lucía', apellido: 'Morales', edad: 30, ciudad: 'Arequipa', genero: 'mujer', descripcion: 'Engaño', denuncias: 2 },
+
+      // Áncash - mayoría hombres (4 hombres, 1 mujer)
+      { nombre: 'Miguel', apellido: 'Castro', edad: 32, ciudad: 'Áncash', genero: 'hombre', descripcion: 'Infiel', denuncias: 2 },
+      { nombre: 'Fernando', apellido: 'Vargas', edad: 29, ciudad: 'Áncash', genero: 'hombre', descripcion: 'Engaño', denuncias: 1 },
+      { nombre: 'Alberto', apellido: 'Ruiz', edad: 35, ciudad: 'Áncash', genero: 'hombre', descripcion: 'Infidelidad', denuncias: 3 },
+      { nombre: 'Sandra', apellido: 'Méndez', edad: 28, ciudad: 'Áncash', genero: 'mujer', descripcion: 'Infiel', denuncias: 1 },
+      { nombre: 'Ricardo', apellido: 'Ortiz', edad: 31, ciudad: 'Áncash', genero: 'hombre', descripcion: 'Engaño', denuncias: 2 },
+
+      // Cusco - mayoría hombres (3 hombres, 1 mujer)
+      { nombre: 'Javier', apellido: 'Gutiérrez', edad: 33, ciudad: 'Cusco', genero: 'hombre', descripcion: 'Infiel', denuncias: 1 },
+      { nombre: 'Antonio', apellido: 'Herrera', edad: 30, ciudad: 'Cusco', genero: 'hombre', descripcion: 'Engaño', denuncias: 2 },
+      { nombre: 'Gabriela', apellido: 'Campos', edad: 27, ciudad: 'Cusco', genero: 'mujer', descripcion: 'Infidelidad', denuncias: 1 },
+      { nombre: 'Daniel', apellido: 'Paredes', edad: 34, ciudad: 'Cusco', genero: 'hombre', descripcion: 'Infiel', denuncias: 1 },
+
+      // La Libertad - mayoría mujeres (3 mujeres, 1 hombre)
+      { nombre: 'Isabella', apellido: 'Reyes', edad: 26, ciudad: 'La Libertad', genero: 'mujer', descripcion: 'Infidelidad', denuncias: 1 },
+      { nombre: 'Camila', apellido: 'Navarro', edad: 29, ciudad: 'La Libertad', genero: 'mujer', descripcion: 'Engaño', denuncias: 2 },
+      { nombre: 'Luis', apellido: 'Montes', edad: 32, ciudad: 'La Libertad', genero: 'hombre', descripcion: 'Infiel', denuncias: 1 },
+      { nombre: 'Natalia', apellido: 'Salazar', edad: 28, ciudad: 'La Libertad', genero: 'mujer', descripcion: 'Infidelidad', denuncias: 1 },
+
+      // Piura - mayoría hombres (2 hombres, 1 mujer)
+      { nombre: 'Andrés', apellido: 'Cortés', edad: 31, ciudad: 'Piura', genero: 'hombre', descripcion: 'Engaño', denuncias: 2 },
+      { nombre: 'Manuel', apellido: 'Figueroa', edad: 29, ciudad: 'Piura', genero: 'hombre', descripcion: 'Infiel', denuncias: 1 },
+      { nombre: 'Valeria', apellido: 'Peña', edad: 27, ciudad: 'Piura', genero: 'mujer', descripcion: 'Infidelidad', denuncias: 1 },
+
+      // Callao - mayoría mujeres (2 mujeres, 1 hombre)
+      { nombre: 'Daniela', apellido: 'Acosta', edad: 30, ciudad: 'Callao', genero: 'mujer', descripcion: 'Infiel', denuncias: 1 },
+      { nombre: 'Carolina', apellido: 'Ríos', edad: 28, ciudad: 'Callao', genero: 'mujer', descripcion: 'Engaño', denuncias: 2 },
+      { nombre: 'Alejandro', apellido: 'Carrillo', edad: 33, ciudad: 'Callao', genero: 'hombre', descripcion: 'Infidelidad', denuncias: 1 },
+
+      // Ica - mayoría mujeres (2 mujeres, 1 hombre)
+      { nombre: 'Fernanda', apellido: 'Molina', edad: 29, ciudad: 'Ica', genero: 'mujer', descripcion: 'Infiel', denuncias: 1 },
+      { nombre: 'Adriana', apellido: 'Ponce', edad: 26, ciudad: 'Ica', genero: 'mujer', descripcion: 'Engaño', denuncias: 2 },
+      { nombre: 'Francisco', apellido: 'Ibarra', edad: 31, ciudad: 'Ica', genero: 'hombre', descripcion: 'Infidelidad', denuncias: 1 },
     ]
 
     for (const reporte of reportes) {
       await client.query(
         `INSERT INTO reportes 
-        (nombre, apellido, edad, ciudad, genero, descripcion, denuncias, red_social) 
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+        (nombre, apellido, edad, ciudad, genero, descripcion, denuncias, fecha) 
+        VALUES ($1, $2, $3, $4, $5, $6, $7, NOW())`,
         [
           reporte.nombre,
           reporte.apellido,
@@ -125,60 +82,35 @@ async function seed() {
           reporte.ciudad,
           reporte.genero,
           reporte.descripcion,
-          reporte.edad,
-          reporte.ciudad,
-          reporte.genero,
-          reporte.descripcion,
-          reporte.denuncias,
-          reporte.redSocial
+          reporte.denuncias
         ]
       )
     }
 
     console.log(`✅ ${reportes.length} reportes insertados`)
 
-    // Insertar búsquedas de ejemplo
-    const busquedas = [
-      { termino: 'Juan', ciudad: 'Lima', genero: null },
-      { termino: 'María', ciudad: null, genero: 'mujer' },
-      { termino: 'Carlos', ciudad: 'Cusco', genero: 'hombre' }
-    ]
-
-    for (const busqueda of busquedas) {
-      await client.query(
-        'INSERT INTO busquedas (termino, ciudad, genero) VALUES ($1, $2, $3)',
-        [busqueda.termino, busqueda.ciudad, busqueda.genero]
-      )
-    }
-
-    console.log(`✅ ${busquedas.length} búsquedas de ejemplo insertadas`)
-
-    // Insertar estadísticas de ciudades
-    const ciudades = ['Lima', 'Arequipa', 'Cusco', 'Trujillo', 'Piura', 'Chiclayo', 'Ica', 'Tacna']
+    // Mostrar estadísticas por departamento
+    const stats = await client.query(`
+      SELECT 
+        ciudad,
+        COUNT(*) as total,
+        SUM(CASE WHEN genero = 'hombre' THEN 1 ELSE 0 END) as hombres,
+        SUM(CASE WHEN genero = 'mujer' THEN 1 ELSE 0 END) as mujeres
+      FROM reportes
+      GROUP BY ciudad
+      ORDER BY total DESC
+    `)
     
-    for (const ciudad of ciudades) {
-      const result = await client.query(
-        'SELECT COUNT(*) as total FROM reportes WHERE ciudad = $1',
-        [ciudad]
-      )
-      const total = parseInt(result.rows[0].total)
-      
-      await client.query(
-        `INSERT INTO estadisticas_ciudad (ciudad, total_reportes) 
-        VALUES ($1, $2) 
-        ON CONFLICT (ciudad) DO UPDATE SET 
-        total_reportes = $2, 
-        ultima_actualizacion = NOW()`,
-        [ciudad, total]
-      )
-    }
+    console.log('\n📊 Estadísticas por departamento:')
+    stats.rows.forEach((row: any) => {
+      const mayoriaGenero = parseInt(row.hombres) > parseInt(row.mujeres) ? '👨 HOMBRES (AZUL)' : '👩 MUJERES (ROSADO)'
+      console.log(`   ${row.ciudad}: ${row.total} reportes (${row.hombres}H, ${row.mujeres}M) - ${mayoriaGenero}`)
+    })
 
-    console.log(`✅ Estadísticas de ${ciudades.length} ciudades actualizadas`)
-    console.log('🎉 Datos sembrados exitosamente')
-    
+    console.log('\n✅ Base de datos lista con datos de ejemplo')
+
   } catch (error) {
-    console.error('❌ Error sembrando datos:', error)
-    throw error
+    console.error('❌ Error:', error)
   } finally {
     client.release()
     await pool.end()

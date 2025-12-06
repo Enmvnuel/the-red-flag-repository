@@ -1,4 +1,12 @@
-import { pool } from '@/lib/db'
+import { Pool } from 'pg'
+
+// Crear pool con configuración SSL para certificados auto-firmados
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+})
 
 async function initDatabase() {
   const client = await pool.connect()

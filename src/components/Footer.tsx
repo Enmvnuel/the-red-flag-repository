@@ -9,7 +9,7 @@ export default function Footer() {
           <div>
             <div className="flex items-center justify-center gap-2 text-xl font-bold text-rose-600">
               <AlertTriangle className="h-6 w-6" />
-              <span>Red Flag</span>
+              <span>Exponme</span>
             </div>
             <p className="mt-3 text-sm text-slate-600">
               Plataforma de denuncias públicas para proteger a la comunidad.
@@ -40,7 +40,7 @@ export default function Footer() {
           <div>
             <h3 className="font-semibold text-slate-900">Contacto</h3>
             <ul className="mt-3 space-y-2 text-sm text-slate-600">
-              <li>denuncias@redflag.pe</li>
+              <li>denuncias@exponme.pe</li>
               <li>Soporte 24/7</li>
             </ul>
           </div>
@@ -50,7 +50,7 @@ export default function Footer() {
           <p className="flex items-center justify-center gap-1">
             Hecho con <Heart className="h-4 w-4 fill-rose-500 text-rose-500" /> en Perú
           </p>
-          <p className="mt-2">© {new Date().getFullYear()} Red Flag. Todos los derechos reservados.</p>
+          <p className="mt-2">© {new Date().getFullYear()} Exponme. Todos los derechos reservados.</p>
         </div>
       </div>
     </footer>

@@ -1,52 +1,46 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Search, Filter, MapPin, Calendar, AlertTriangle, User, SearchCheck, X } from "lucide-react";
+import { Search, Filter, MapPin, Calendar, AlertTriangle, User, SearchCheck, X, Heart } from "lucide-react";
 import Link from "next/link";
 import { useReportes } from "@/hooks/useDatabase";
-import type { Genero } from "@/types";
 import CustomSelect from "@/components/ui/CustomSelect";
 
-interface GenderPageProps {
-  gender: Genero;
-}
-
-export default function GenderPage({ gender }: GenderPageProps) {
+export default function CachudosPage() {
   const [busqueda, setBusqueda] = useState("");
   const [ciudadFiltro, setCiudadFiltro] = useState("");
   const { reportes, loading, error } = useReportes(500);
 
-  const isMale = gender === "hombre";
-  const title = isMale ? "Denuncias de Hombres" : "Denuncias de Mujeres";
-  const subtitle = isMale ? "Reportes verificados de hombres en la plataforma" : "Reportes verificados de mujeres en la plataforma";
+  const title = "Cachudos Reportados";
+  const subtitle = "Personas a quienes les fueron infieles según reportes de la comunidad";
 
-  // Tailwind classes based on theme
-  const accentColor = isMale ? "text-blue-600" : "text-pink-600";
-  const ringColor = isMale ? "focus:ring-blue-500" : "focus:ring-pink-500";
-  const bgGradientIcon = isMale ? "bg-gradient-to-br from-blue-50 to-blue-100 text-blue-600 ring-blue-200" : "bg-gradient-to-br from-pink-50 to-pink-100 text-pink-600 ring-pink-200";
-  const hoverShadow = isMale ? "hover:shadow-blue-500/10" : "hover:shadow-pink-500/10";
-  const hoverRing = isMale ? "hover:ring-blue-100" : "hover:ring-pink-100";
-  const buttonHover = isMale ? "group-hover:bg-blue-600 group-hover:shadow-blue-200" : "group-hover:bg-pink-600 group-hover:shadow-pink-200";
-  const badgeBg = isMale ? "bg-blue-50 text-blue-600 ring-blue-100/50" : "bg-pink-50 text-pink-600 ring-pink-100/50";
+  // Colores amarillo/oro para cachudos
+  const accentColor = "text-amber-600";
+  const ringColor = "focus:ring-amber-500";
+  const bgGradientIcon = "bg-gradient-to-br from-amber-50 to-amber-100 text-amber-600 ring-amber-200";
+  const hoverShadow = "hover:shadow-amber-500/10";
+  const hoverRing = "hover:ring-amber-100";
+  const buttonHover = "group-hover:bg-amber-600 group-hover:shadow-amber-200";
+  const badgeBg = "bg-amber-50 text-amber-600 ring-amber-100/50";
 
-  const reportesGenero = useMemo(() => 
-    reportes.filter((r) => r.genero === gender),
-    [reportes, gender]
+  const reportesCachudos = useMemo(() => 
+    reportes.filter((r) => r.tipoReporte === "cachudo"),
+    [reportes]
   );
 
   const reportesFiltrados = useMemo(() => {
-    return reportesGenero.filter((reporte) => {
+    return reportesCachudos.filter((reporte) => {
       const matchNombre = busqueda === "" || 
         reporte.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
         (reporte.apellido && reporte.apellido.toLowerCase().includes(busqueda.toLowerCase()));
       const matchCiudad = ciudadFiltro === "" || reporte.ciudad === ciudadFiltro;
       return matchNombre && matchCiudad;
     });
-  }, [reportesGenero, busqueda, ciudadFiltro]);
+  }, [reportesCachudos, busqueda, ciudadFiltro]);
 
   const ciudades = useMemo(() => 
-    Array.from(new Set(reportesGenero.map((r) => r.ciudad))),
-    [reportesGenero]
+    Array.from(new Set(reportesCachudos.map((r) => r.ciudad))),
+    [reportesCachudos]
   );
   
   const cityOptions = [
@@ -58,7 +52,7 @@ export default function GenderPage({ gender }: GenderPageProps) {
     return (
       <div className="min-h-screen bg-slate-50 px-6 py-12 flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block h-16 w-16 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status">
+          <div className="inline-block h-16 w-16 animate-spin rounded-full border-4 border-solid border-amber-600 border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status">
             <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Cargando...</span>
           </div>
           <p className="mt-4 text-lg font-semibold text-slate-600">Cargando reportes...</p>
@@ -80,9 +74,13 @@ export default function GenderPage({ gender }: GenderPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 px-6 py-12 bg-[url('/grid.svg')] bg-fixed selection:bg-rose-500 selection:text-white">
+    <div className="min-h-screen bg-slate-50 px-6 py-12 bg-[url('/grid.svg')] bg-fixed selection:bg-amber-500 selection:text-white">
       <div className="mx-auto max-w-7xl">
         <div className="mb-16 text-center">
+          <div className="inline-flex items-center gap-2 rounded-full bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-600 ring-1 ring-inset ring-amber-100 mb-4">
+            <Heart className="h-4 w-4" />
+            Base de Datos de Cachudos
+          </div>
           <h1 className="text-5xl font-black tracking-tighter text-slate-900 sm:text-6xl mb-6">
             {title}
           </h1>
@@ -91,7 +89,7 @@ export default function GenderPage({ gender }: GenderPageProps) {
           </p>
         </div>
 
-        {/* Search & Filter Section - Glassmorphism */}
+        {/* Search & Filter Section */}
         <div className="sticky top-4 z-30 mb-12 rounded-[2rem] border border-white/50 bg-white/80 p-6 shadow-2xl shadow-slate-200/50 backdrop-blur-xl ring-1 ring-slate-200/50">
           <div className="flex flex-col gap-4 md:flex-row">
             {/* Search Input */}
@@ -125,7 +123,7 @@ export default function GenderPage({ gender }: GenderPageProps) {
               onChange={setCiudadFiltro}
               placeholder="Todas las ciudades"
               icon={Filter}
-              accentColor={isMale ? "blue" : "pink"}
+              accentColor="amber"
               className="md:w-80"
             />
           </div>
@@ -134,8 +132,8 @@ export default function GenderPage({ gender }: GenderPageProps) {
         <div className="mb-8 flex items-center justify-between px-4">
           <div className="flex items-center gap-3">
             <span className="flex h-3 w-3 relative">
-              <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${isMale ? 'bg-blue-400' : 'bg-pink-400'}`}></span>
-              <span className={`relative inline-flex rounded-full h-3 w-3 ${isMale ? 'bg-blue-500' : 'bg-pink-500'}`}></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
             </span>
             <p className="text-sm font-bold text-slate-600 uppercase tracking-wide">
               {reportesFiltrados.length} {reportesFiltrados.length === 1 ? "Resultado encontrado" : "Resultados encontrados"}
@@ -154,7 +152,7 @@ export default function GenderPage({ gender }: GenderPageProps) {
               <div className="mb-6 flex items-start justify-between">
                 <div className="flex items-center gap-4">
                   <div className={`flex h-16 w-16 items-center justify-center rounded-2xl transition-transform group-hover:scale-110 ring-1 ${bgGradientIcon}`}>
-                    <User className="h-8 w-8" />
+                    <Heart className="h-8 w-8" />
                   </div>
                   <div>
                     <h3 className={`text-xl font-bold text-slate-900 leading-tight group-hover:${accentColor} transition-colors`}>
@@ -200,7 +198,7 @@ export default function GenderPage({ gender }: GenderPageProps) {
         {reportesFiltrados.length === 0 && (
           <div className="flex flex-col items-center justify-center rounded-[3rem] border-2 border-dashed border-slate-200 bg-slate-50/50 p-20 text-center">
             <div className="mb-6 rounded-3xl bg-white p-6 shadow-xl shadow-slate-200/50 ring-1 ring-slate-100">
-              <Search className="h-12 w-12 text-slate-300" />
+              <Heart className="h-12 w-12 text-amber-300" />
             </div>
             <h3 className="text-2xl font-black text-slate-900 mb-2">No se encontraron resultados</h3>
             <p className="text-lg text-slate-500 max-w-md mx-auto mb-8">
@@ -211,7 +209,7 @@ export default function GenderPage({ gender }: GenderPageProps) {
                 setBusqueda("");
                 setCiudadFiltro("");
               }}
-              className={`inline-flex items-center justify-center rounded-full bg-slate-900 px-8 py-4 text-base font-bold text-white transition-all hover:scale-105 hover:shadow-xl ${isMale ? 'hover:bg-blue-600' : 'hover:bg-pink-600'}`}
+              className="inline-flex items-center justify-center rounded-full bg-slate-900 px-8 py-4 text-base font-bold text-white transition-all hover:scale-105 hover:shadow-xl hover:bg-amber-600"
             >
               Limpiar filtros
             </button>

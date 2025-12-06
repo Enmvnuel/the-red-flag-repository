@@ -64,7 +64,7 @@ export default function PrivacyPage() {
                                 </div>
                                 <div className="prose prose-slate max-w-none text-slate-600">
                                     <p>
-                                        En <strong>Red Flag</strong>, creemos en el principio de "mínimos datos necesarios". Solo recopilamos la información estrictamente necesaria para que la plataforma funcione de manera segura y eficiente.
+                                        En <strong>Exponme</strong>, creemos en el principio de "mínimos datos necesarios". Solo recopilamos la información estrictamente necesaria para que la plataforma funcione de manera segura y eficiente.
                                     </p>
                                     <p>
                                         Esto puede incluir datos básicos de registro (si decides crear una cuenta) y, por supuesto, la información que tú voluntariamente decides compartir en tus reportes. <strong>Nunca recopilamos datos biométricos ni ubicación en tiempo real sin tu consentimiento explícito.</strong>

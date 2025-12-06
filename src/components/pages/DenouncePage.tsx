@@ -40,20 +40,64 @@ export default function DenouncePage() {
     departamento: "",
     genero: "",
     redSocial: "",
+    tipoReporte: "infiel", // Nuevo campo
     descripcion: "",
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulate API call
-    setTimeout(() => {
-      console.log("Formulario enviado:", formData);
+    setError(null);
+    
+    try {
+      const response = await fetch('/api/reportes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          nombre: formData.nombreDenunciado,
+          apellido: formData.apellidoDenunciado || null,
+          edad: parseInt(formData.edad),
+          ciudad: formData.departamento,
+          genero: formData.genero as 'hombre' | 'mujer',
+          descripcion: formData.descripcion,
+          redSocial: formData.redSocial || null,
+          tipoReporte: formData.tipoReporte as 'infiel' | 'cachudo',
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSuccess(true);
+        // Limpiar formulario
+        setFormData({
+          nombreDenunciado: "",
+          apellidoDenunciado: "",
+          edad: "",
+          departamento: "",
+          genero: "",
+          redSocial: "",
+          tipoReporte: "infiel",
+          descripcion: "",
+        });
+        
+        // Scroll al top para ver mensaje de éxito
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        setError(data.error || 'Error al enviar la denuncia');
+      }
+    } catch (err) {
+      console.error('Error submitting form:', err);
+      setError('Error de conexión. Por favor intenta de nuevo.');
+    } finally {
       setIsSubmitting(false);
-      // Here you would typically redirect or show a success message
-    }, 1500);
+    }
   };
 
 
@@ -72,6 +116,60 @@ export default function DenouncePage() {
             Tu reporte ayuda a proteger a la comunidad. Completa el formulario con responsabilidad.
           </p>
         </div>
+
+        {/* Success Message */}
+        {success && (
+          <div className="mb-6 rounded-2xl bg-green-50 border border-green-200 p-6 animate-fade-in">
+            <div className="flex items-start gap-4">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-500 text-white flex-shrink-0">
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-bold text-green-900 mb-1">¡Denuncia enviada exitosamente!</h3>
+                <p className="text-green-700">
+                  Tu reporte ha sido registrado y ahora está disponible en la plataforma. Gracias por contribuir a la seguridad de la comunidad.
+                </p>
+                <div className="mt-4 flex gap-3">
+                  <Link
+                    href="/buscar"
+                    className="inline-flex items-center gap-2 rounded-full bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700 transition-colors"
+                  >
+                    Ver en búsqueda
+                  </Link>
+                  <button
+                    onClick={() => setSuccess(false)}
+                    className="inline-flex items-center gap-2 rounded-full bg-white border border-green-300 px-4 py-2 text-sm font-semibold text-green-700 hover:bg-green-50 transition-colors"
+                  >
+                    Hacer otra denuncia
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Error Message */}
+        {error && (
+          <div className="mb-6 rounded-2xl bg-rose-50 border border-rose-200 p-6 animate-fade-in">
+            <div className="flex items-start gap-4">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-rose-500 text-white flex-shrink-0">
+                <AlertCircle className="h-6 w-6" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-bold text-rose-900 mb-1">Error al enviar la denuncia</h3>
+                <p className="text-rose-700">{error}</p>
+                <button
+                  onClick={() => setError(null)}
+                  className="mt-3 text-sm font-semibold text-rose-600 hover:text-rose-700 underline"
+                >
+                  Cerrar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-xl shadow-slate-200/50 backdrop-blur-md sm:p-10">
           <div className="space-y-8">
@@ -180,6 +278,25 @@ export default function DenouncePage() {
                   className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 placeholder:text-slate-400 focus:border-rose-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-rose-500/20 transition-all"
                   placeholder="@usuario o enlace al perfil"
                 />
+              </div>
+
+              <div>
+                <label htmlFor="tipoReporte" className="mb-2 block text-sm font-semibold text-slate-700">
+                  Tipo de Reporte
+                </label>
+                <select
+                  id="tipoReporte"
+                  required
+                  value={formData.tipoReporte}
+                  onChange={(e) => setFormData({ ...formData, tipoReporte: e.target.value })}
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 focus:border-rose-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-rose-500/20 transition-all"
+                >
+                  <option value="infiel">🔴 Infiel - Persona que fue infiel</option>
+                  <option value="cachudo">🟡 Cachudo - Persona a quien le fueron infiel</option>
+                </select>
+                <p className="mt-2 text-xs text-slate-500">
+                  Selecciona si la persona denunciada fue infiel o si le fueron infiel
+                </p>
               </div>
             </div>
 

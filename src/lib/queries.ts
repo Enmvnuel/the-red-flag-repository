@@ -1,6 +1,23 @@
 import { pool, query } from './db'
 import type { Genero, Reporte } from '@/types'
 
+// Función para mapear resultado de DB a tipo Reporte
+function mapDBToReporte(row: any): Reporte {
+  return {
+    id: row.id,
+    nombre: row.nombre,
+    apellido: row.apellido,
+    edad: row.edad,
+    ciudad: row.ciudad,
+    genero: row.genero,
+    fecha: row.fecha,
+    descripcion: row.descripcion,
+    denuncias: row.denuncias,
+    redSocial: row.red_social, // Mapear red_social a redSocial
+    tipoReporte: row.tipo_reporte, // Mapear tipo_reporte a tipoReporte
+  }
+}
+
 // Obtener todos los reportes con paginación
 export async function getReportes(page: number = 1, limit: number = 20) {
   const offset = (page - 1) * limit
@@ -14,7 +31,7 @@ export async function getReportes(page: number = 1, limit: number = 20) {
   const total = parseInt(countQuery.rows[0].count)
 
   return {
-    reportes: reportesQuery.rows,
+    reportes: reportesQuery.rows.map(mapDBToReporte),
     total,
     page,
     totalPages: Math.ceil(total / limit),
@@ -72,21 +89,21 @@ export async function buscarReportes(
     [termino, filtros?.ciudad || null, filtros?.genero || null]
   ).catch(() => {}) // Ignorar errores de logging
 
-  return result.rows
+  return result.rows.map(mapDBToReporte)
 }
 
 // Obtener un reporte por ID
 export async function getReportePorId(id: string) {
   const result = await query('SELECT * FROM reportes WHERE id = $1', [id])
-  return result.rows[0] || null
+  return result.rows[0] ? mapDBToReporte(result.rows[0]) : null
 }
 
 // Crear un nuevo reporte
 export async function crearReporte(data: Omit<Reporte, 'id' | 'fecha' | 'createdAt' | 'updatedAt'>) {
   const result = await query(
     `INSERT INTO reportes 
-    (nombre, apellido, edad, ciudad, genero, descripcion, denuncias, red_social, fecha, created_at, updated_at) 
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW(), NOW(), NOW()) 
+    (nombre, apellido, edad, ciudad, genero, descripcion, denuncias, red_social, tipo_reporte, fecha) 
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW()) 
     RETURNING *`,
     [
       data.nombre,
@@ -97,9 +114,10 @@ export async function crearReporte(data: Omit<Reporte, 'id' | 'fecha' | 'created
       data.descripcion,
       data.denuncias || 1,
       data.redSocial || null,
+      data.tipoReporte || 'infiel',
     ]
   )
-  return result.rows[0]
+  return mapDBToReporte(result.rows[0])
 }
 
 // Incrementar denuncias de un reporte
@@ -140,7 +158,7 @@ export async function getReportesPorCiudad(ciudad: string) {
     'SELECT * FROM reportes WHERE ciudad = $1 ORDER BY denuncias DESC',
     [ciudad]
   )
-  return result.rows
+  return result.rows.map(mapDBToReporte)
 }
 
 // Obtener reportes por género
@@ -149,7 +167,7 @@ export async function getReportesPorGenero(genero: Genero) {
     'SELECT * FROM reportes WHERE genero = $1 ORDER BY fecha DESC',
     [genero]
   )
-  return result.rows
+  return result.rows.map(mapDBToReporte)
 }
 
 // Actualizar un reporte
@@ -180,11 +198,31 @@ export async function actualizarReporte(id: string, data: Partial<Reporte>) {
     `UPDATE reportes SET ${fields.join(', ')} WHERE id = $${paramCount} RETURNING *`,
     values
   )
-  return result.rows[0]
+  return mapDBToReporte(result.rows[0])
 }
 
 // Eliminar un reporte (si es necesario para moderación)
 export async function eliminarReporte(id: string) {
   const result = await query('DELETE FROM reportes WHERE id = $1 RETURNING *', [id])
-  return result.rows[0]
+  return result.rows[0] ? mapDBToReporte(result.rows[0]) : null
+}
+
+// Obtener reportes por tipo de reporte (infiel o cachudo)
+export async function getReportesPorTipo(tipo: 'infiel' | 'cachudo', page: number = 1, limit: number = 500) {
+  const offset = (page - 1) * limit
+  
+  const result = await query(
+    'SELECT * FROM reportes WHERE tipo_reporte = $1 ORDER BY fecha DESC LIMIT $2 OFFSET $3',
+    [tipo, limit, offset]
+  )
+  
+  const countQuery = await query('SELECT COUNT(*) FROM reportes WHERE tipo_reporte = $1', [tipo])
+  const total = parseInt(countQuery.rows[0].count)
+
+  return {
+    reportes: result.rows.map(mapDBToReporte),
+    total,
+    page,
+    totalPages: Math.ceil(total / limit),
+  }
 }

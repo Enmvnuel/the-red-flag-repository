@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Red Flag - Denuncia Infidelidades en Perú",
+  title: "Exponme - Denuncia Infidelidades en Perú",
   description: "Plataforma pública para denunciar y descubrir personas infieles. Protege a la comunidad.",
 };
 
