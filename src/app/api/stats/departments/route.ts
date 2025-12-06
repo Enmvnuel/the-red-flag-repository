@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server'
 import { ReporteService } from '@/services/reporteService'
 
+// Forzar que esta ruta sea dinámica (no se pre-renderice durante build)
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   try {
     const stats = await ReporteService.getStatsByDepartment()

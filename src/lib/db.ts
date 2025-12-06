@@ -5,8 +5,11 @@ const globalForPg = globalThis as unknown as {
   pool: Pool | undefined
 }
 
-// Verificar que DATABASE_URL exista
-if (!process.env.DATABASE_URL) {
+// Durante el build de Next.js, no necesitamos conexión a BD
+const isBuildTime = process.env.NEXT_PHASE === 'phase-production-build'
+
+// Verificar que DATABASE_URL exista (solo en runtime, no durante build)
+if (!process.env.DATABASE_URL && !isBuildTime) {
   console.error('❌ ERROR: DATABASE_URL no está configurada')
   console.error('Configura la variable de entorno DATABASE_URL en:')
   console.error('- Desarrollo: archivo .env.local')
@@ -14,8 +17,13 @@ if (!process.env.DATABASE_URL) {
   throw new Error('DATABASE_URL is required')
 }
 
+// Usar una URL dummy durante el build para evitar errores
+const connectionString = isBuildTime 
+  ? 'postgresql://dummy:dummy@localhost:5432/dummy'
+  : process.env.DATABASE_URL
+
 export const pool = globalForPg.pool ?? new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString,
   ssl: {
     rejectUnauthorized: false
   },
@@ -25,7 +33,7 @@ export const pool = globalForPg.pool ?? new Pool({
 })
 
 // Log de conexión (solo en desarrollo)
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production' && !isBuildTime) {
   const dbHost = process.env.DATABASE_URL?.match(/@([^:]+)/)?.[1] || 'unknown'
   console.log(`✅ Conectado a PostgreSQL: ${dbHost}`)
 }

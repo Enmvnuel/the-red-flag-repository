@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getReportePorId, actualizarReporte, eliminarReporte } from '@/lib/queries'
 
+// Forzar que esta ruta sea dinámica (no se pre-renderice durante build)
+export const dynamic = 'force-dynamic'
+
 // GET /api/reportes/[id] - Obtener un reporte específico
 export async function GET(
   request: NextRequest,
