@@ -11,5 +11,4 @@ export interface Reporte {
   descripcion: string;
   denuncias: number;
   redSocial?: string;
-  evidencias?: string[];
 }

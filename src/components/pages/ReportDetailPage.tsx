@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, MapPin, Calendar, AlertTriangle, User, Flag, Share2, ShieldAlert, FileText } from "lucide-react";
+import { ArrowLeft, MapPin, Calendar, AlertTriangle, User, Flag, Share2, ShieldAlert } from "lucide-react";
 
 const mockReporte = {
   id: "1",
@@ -13,13 +13,8 @@ const mockReporte = {
   redSocial: "@carlosmendoza",
   fecha: "2025-12-01",
   descripcion:
-    "Persona reportada por múltiples casos de infidelidad comprobada. Mantenía relaciones paralelas con al menos 3 personas diferentes, utilizando perfiles falsos en redes sociales. Las víctimas han proporcionado evidencias de conversaciones y encuentros. Se ha confirmado que engañó a su pareja principal durante más de 2 años, mientras mantenía relaciones activas con otras personas bajo promesas de compromiso serio.",
+    "Persona reportada por múltiples casos de infidelidad comprobada. Mantenía relaciones paralelas con al menos 3 personas diferentes, utilizando perfiles falsos en redes sociales. Se ha confirmado que engañó a su pareja principal durante más de 2 años, mientras mantenía relaciones activas con otras personas bajo promesas de compromiso serio.",
   denuncias: 5,
-  evidencias: [
-    "Capturas de conversaciones comprometedoras",
-    "Testimonios de 3 personas afectadas",
-    "Fotos en lugares con diferentes personas",
-  ],
 };
 
 export default function ReportDetailPage() {
@@ -98,29 +93,7 @@ export default function ReportDetailPage() {
               </div>
             </section>
 
-            {mockReporte.evidencias.length > 0 && (
-              <section className="mb-12">
-                <h2 className="mb-6 flex items-center gap-3 text-2xl font-bold text-slate-900">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-100 text-indigo-600">
-                    <ShieldAlert className="h-5 w-5" />
-                  </div>
-                  Evidencias reportadas
-                </h2>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  {mockReporte.evidencias.map((evidencia, index) => (
-                    <div
-                      key={index}
-                      className="flex items-start gap-4 rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:border-rose-200 hover:shadow-md"
-                    >
-                      <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-rose-100 text-xs font-bold text-rose-600">
-                        <FileText className="h-3 w-3" />
-                      </div>
-                      <p className="font-medium text-slate-700">{evidencia}</p>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            )}
+
 
             <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6 mb-10">
               <div className="flex gap-4">

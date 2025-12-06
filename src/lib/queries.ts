@@ -85,8 +85,8 @@ export async function getReportePorId(id: string) {
 export async function crearReporte(data: Omit<Reporte, 'id' | 'fecha' | 'createdAt' | 'updatedAt'>) {
   const result = await query(
     `INSERT INTO reportes 
-    (nombre, apellido, edad, ciudad, genero, descripcion, denuncias, red_social, evidencias, fecha, created_at, updated_at) 
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW(), NOW(), NOW()) 
+    (nombre, apellido, edad, ciudad, genero, descripcion, denuncias, red_social, fecha, created_at, updated_at) 
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW(), NOW(), NOW()) 
     RETURNING *`,
     [
       data.nombre,
@@ -97,7 +97,6 @@ export async function crearReporte(data: Omit<Reporte, 'id' | 'fecha' | 'created
       data.descripcion,
       data.denuncias || 1,
       data.redSocial || null,
-      data.evidencias || [],
     ]
   )
   return result.rows[0]

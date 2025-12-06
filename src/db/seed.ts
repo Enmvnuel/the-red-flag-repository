@@ -19,8 +19,7 @@ async function seed() {
         genero: 'hombre',
         descripcion: 'Comportamiento agresivo y manipulador. Múltiples denuncias por violencia psicológica.',
         denuncias: 3,
-        redSocial: '@juanperez',
-        evidencias: ['https://example.com/evidencia1.jpg']
+        redSocial: '@juanperez'
       },
       {
         nombre: 'María',
@@ -30,8 +29,7 @@ async function seed() {
         genero: 'mujer',
         descripcion: 'Comportamiento tóxico y controlador. Reportes de acoso constante.',
         denuncias: 2,
-        redSocial: null,
-        evidencias: []
+        redSocial: null
       },
       {
         nombre: 'Carlos',
@@ -41,8 +39,7 @@ async function seed() {
         genero: 'hombre',
         descripcion: 'Múltiples relaciones simultáneas sin consentimiento. Mentiras compulsivas.',
         denuncias: 5,
-        redSocial: '@crodriguez',
-        evidencias: ['https://example.com/evidencia2.jpg', 'https://example.com/evidencia3.jpg']
+        redSocial: '@crodriguez'
       },
       {
         nombre: 'Ana',
@@ -52,8 +49,7 @@ async function seed() {
         genero: 'mujer',
         descripcion: 'Comportamiento manipulador y gaslighting. Varias denuncias por abuso emocional.',
         denuncias: 4,
-        redSocial: null,
-        evidencias: ['https://example.com/evidencia4.jpg']
+        redSocial: null
       },
       {
         nombre: 'Diego',
@@ -63,8 +59,7 @@ async function seed() {
         genero: 'hombre',
         descripcion: 'Infidelidad reiterada y falta de compromiso emocional.',
         denuncias: 2,
-        redSocial: '@diegosanchez',
-        evidencias: []
+        redSocial: '@diegosanchez'
       },
       {
         nombre: 'Lucía',
@@ -74,8 +69,7 @@ async function seed() {
         genero: 'mujer',
         descripcion: 'Comportamiento violento y agresivo. Múltiples denuncias por violencia física.',
         denuncias: 6,
-        redSocial: null,
-        evidencias: ['https://example.com/evidencia5.jpg']
+        redSocial: null
       },
       {
         nombre: 'Roberto',
@@ -85,8 +79,7 @@ async function seed() {
         genero: 'hombre',
         descripcion: 'Acoso persistente después de la ruptura. Comportamiento obsesivo.',
         denuncias: 3,
-        redSocial: '@rflores',
-        evidencias: ['https://example.com/evidencia6.jpg', 'https://example.com/evidencia7.jpg']
+        redSocial: '@rflores'
       },
       {
         nombre: 'Patricia',
@@ -96,8 +89,7 @@ async function seed() {
         genero: 'mujer',
         descripcion: 'Mentiras constantes y manipulación emocional.',
         denuncias: 2,
-        redSocial: null,
-        evidencias: []
+        redSocial: null
       },
       {
         nombre: 'Miguel',
@@ -107,8 +99,7 @@ async function seed() {
         genero: 'hombre',
         descripcion: 'Infidelidad y comportamiento narcisista. Varias denuncias.',
         denuncias: 4,
-        redSocial: '@mcastro',
-        evidencias: ['https://example.com/evidencia8.jpg']
+        redSocial: '@mcastro'
       },
       {
         nombre: 'Elena',
@@ -118,16 +109,15 @@ async function seed() {
         genero: 'mujer',
         descripcion: 'Comportamiento controlador y celos excesivos.',
         denuncias: 3,
-        redSocial: null,
-        evidencias: []
+        redSocial: null
       }
     ]
 
     for (const reporte of reportes) {
       await client.query(
         `INSERT INTO reportes 
-        (nombre, apellido, edad, ciudad, genero, descripcion, denuncias, red_social, evidencias) 
-        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+        (nombre, apellido, edad, ciudad, genero, descripcion, denuncias, red_social) 
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
         [
           reporte.nombre,
           reporte.apellido,
@@ -135,9 +125,12 @@ async function seed() {
           reporte.ciudad,
           reporte.genero,
           reporte.descripcion,
+          reporte.edad,
+          reporte.ciudad,
+          reporte.genero,
+          reporte.descripcion,
           reporte.denuncias,
-          reporte.redSocial,
-          reporte.evidencias
+          reporte.redSocial
         ]
       )
     }

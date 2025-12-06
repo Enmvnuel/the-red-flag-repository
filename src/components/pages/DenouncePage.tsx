@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Flag, FileUp, X, AlertCircle, CheckCircle2 } from "lucide-react";
+import { Flag, AlertCircle } from "lucide-react";
 import Link from "next/link";
 
 const DEPARTAMENTOS = [
@@ -43,7 +43,6 @@ export default function DenouncePage() {
     descripcion: "",
   });
 
-  const [evidencias, setEvidencias] = useState<File[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -51,21 +50,13 @@ export default function DenouncePage() {
     setIsSubmitting(true);
     // Simulate API call
     setTimeout(() => {
-      console.log("Formulario enviado:", formData, evidencias);
+      console.log("Formulario enviado:", formData);
       setIsSubmitting(false);
       // Here you would typically redirect or show a success message
     }, 1500);
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setEvidencias([...evidencias, ...Array.from(e.target.files)]);
-    }
-  };
 
-  const removeFile = (index: number) => {
-    setEvidencias(evidencias.filter((_, i) => i !== index));
-  };
 
   return (
     <div className="min-h-screen bg-slate-50 px-6 py-12 bg-grid-pattern">
@@ -216,62 +207,7 @@ export default function DenouncePage() {
                 />
               </div>
 
-              <div>
-                <label className="mb-2 block text-sm font-semibold text-slate-700">
-                  Evidencias (opcional)
-                </label>
-                <div className="mt-2">
-                  <label
-                    htmlFor="file-upload"
-                    className="group flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 px-6 py-10 transition-all hover:border-rose-500 hover:bg-rose-50"
-                  >
-                    <div className="rounded-full bg-white p-3 shadow-sm ring-1 ring-slate-200 transition-all group-hover:ring-rose-200">
-                      <FileUp className="h-6 w-6 text-slate-400 group-hover:text-rose-500" />
-                    </div>
-                    <div className="text-center">
-                      <span className="text-sm font-medium text-slate-700 group-hover:text-rose-700">
-                        Haz clic para subir archivos
-                      </span>
-                      <p className="mt-1 text-xs text-slate-500">
-                        Imágenes, capturas de pantalla (Max. 5MB)
-                      </p>
-                    </div>
-                    <input
-                      id="file-upload"
-                      type="file"
-                      multiple
-                      accept="image/*"
-                      onChange={handleFileChange}
-                      className="hidden"
-                    />
-                  </label>
-                </div>
 
-                {evidencias.length > 0 && (
-                  <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                    {evidencias.map((file, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center justify-between rounded-lg border border-slate-200 bg-white p-3 shadow-sm"
-                      >
-                        <div className="flex items-center gap-3 overflow-hidden">
-                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-100">
-                            <CheckCircle2 className="h-5 w-5 text-emerald-500" />
-                          </div>
-                          <span className="truncate text-sm font-medium text-slate-700">{file.name}</span>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => removeFile(index)}
-                          className="rounded-full p-1 text-slate-400 hover:bg-rose-50 hover:text-rose-600"
-                        >
-                          <X className="h-5 w-5" />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
             </div>
 
             <div className="rounded-xl bg-amber-50 p-4 text-sm text-amber-800 border border-amber-100 flex gap-3">

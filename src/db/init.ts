@@ -28,7 +28,6 @@ async function initDatabase() {
         descripcion TEXT NOT NULL,
         denuncias INTEGER DEFAULT 1,
         red_social VARCHAR(255),
-        evidencias TEXT[] DEFAULT '{}',
         created_at TIMESTAMP DEFAULT NOW(),
         updated_at TIMESTAMP DEFAULT NOW()
       )
