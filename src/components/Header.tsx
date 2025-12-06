@@ -67,7 +67,7 @@ export default function Header() {
               onClick={() => setMenuOpen(false)}
               className="text-slate-600 transition-colors hover:text-rose-600 font-medium"
             >
-              Hombres
+              assfaweawegaweesfaefsefase
             </Link>
             <Link
               href="/mujeres"
