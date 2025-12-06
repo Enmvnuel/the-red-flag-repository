@@ -1,0 +1,63 @@
+name: Integración Continua (CI) - Next.js a Docker Hub
+
+# 1. Configuración de Disparador (Trigger)
+# El workflow se ejecuta automáticamente en cada push a la rama 'main'.
+on:
+  push:
+    branches:
+      - main  # Rama principal de producción
+
+# Definición del trabajo principal: Construir y Subir la Imagen
+jobs:
+  build_and_push:
+    # Se ejecuta en el agente de Ubuntu (el ambiente de ejecución de GitHub)
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Paso 1: Obtener el Código Fuente
+      - name: Checkout del Repositorio
+        uses: actions/checkout@v4
+
+      # Paso 2: Configurar Node.js (Necesario si el Dockerfile es multi-stage o para tests previos)
+      - name: Configurar Entorno Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' 
+          
+      # Paso 3: Autenticación Segura en Docker Hub
+      - name: Login en Docker Hub
+        uses: docker/login-action@v3
+        with:
+          # Se usa la URL del registro si no es la predeterminada, obtenida desde los Secrets
+          registry: ${{ secrets.DOCKER_REGISTRY_URL }} 
+          # Credenciales del usuario y el PAT/Token de Acceso
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Paso 4: Definición del Tag Único de la Imagen
+      - name: Definir Tag Único para la Imagen
+        id: image
+        # La ruta completa incluye el repositorio y el SHA del commit como versión
+        run: echo "IMAGE_TAG=enmvnuel/expon.me:${{ github.sha }}" >> $GITHUB_OUTPUT
+        # El SHA es un identificador de commit único, ideal para un despliegue trazable.
+
+      # Paso 5: Construcción y Subida (Push) de la Imagen
+      - name: Construir y Subir la Imagen a Docker Hub
+        uses: docker/build-push-action@v5
+        with:
+          context: . # Usa el directorio actual como contexto de Docker
+          push: true # Indica que debe subir la imagen después de construirla
+          tags: ${{ steps.image.outputs.IMAGE_TAG }} 
+          # Opcional: Caching para acelerar builds subsiguientes
+          cache-from: type=gha 
+
+      # Paso 6: Despliegue Continuo (CD) - Notificación a Dokploy
+      - name: Notificar a Dokploy para Iniciar Despliegue
+        run: |
+          echo "Nueva imagen subida: ${{ steps.image.outputs.IMAGE_TAG }}"
+          # --------------------------------------------------------------------
+          # Aquí se debe colocar el comando para activar el despliegue en Dokploy.
+          # Esto generalmente es una llamada a un Webhook o una API.
+          # Ejemplo (Dokploy podría requerir un curl con un token y el nuevo SHA):
+          # curl -X POST "https://dokploy.tu-dominio.com/api/deploy?token=SECRET_TOKEN&tag=${{ github.sha }}"
+          # --------------------------------------------------------------------
