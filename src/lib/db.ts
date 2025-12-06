@@ -5,6 +5,15 @@ const globalForPg = globalThis as unknown as {
   pool: Pool | undefined
 }
 
+// Verificar que DATABASE_URL exista
+if (!process.env.DATABASE_URL) {
+  console.error('❌ ERROR: DATABASE_URL no está configurada')
+  console.error('Configura la variable de entorno DATABASE_URL en:')
+  console.error('- Desarrollo: archivo .env.local')
+  console.error('- Producción: Panel de Dokploy → Environment Variables')
+  throw new Error('DATABASE_URL is required')
+}
+
 export const pool = globalForPg.pool ?? new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
@@ -14,6 +23,12 @@ export const pool = globalForPg.pool ?? new Pool({
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
 })
+
+// Log de conexión (solo en desarrollo)
+if (process.env.NODE_ENV !== 'production') {
+  const dbHost = process.env.DATABASE_URL?.match(/@([^:]+)/)?.[1] || 'unknown'
+  console.log(`✅ Conectado a PostgreSQL: ${dbHost}`)
+}
 
 if (process.env.NODE_ENV !== 'production') globalForPg.pool = pool
 
