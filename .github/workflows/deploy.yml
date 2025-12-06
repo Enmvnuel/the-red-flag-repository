@@ -1,64 +1,65 @@
 name: Integración Continua (CI) - Next.js a Docker Hub
 
 # 1. Configuración de Disparador (Trigger)
-# El workflow se ejecuta automáticamente en cada push a la rama 'main'.
 on:
   push:
     branches:
-      - main  # Rama principal de producción
+      - main  # Se ejecuta al hacer push a la rama main
 
-# Definición del trabajo principal: Construir y Subir la Imagen
 jobs:
   build_and_push:
-    # Se ejecuta en el agente de Ubuntu (el ambiente de ejecución de GitHub)
     runs-on: ubuntu-latest
     
     steps:
-      # Paso 1: Obtener el Código Fuente
+      # Paso 1: Obtener el código
       - name: Checkout del Repositorio
         uses: actions/checkout@v4
 
-      # Paso 2: Configurar Node.js (Necesario si el Dockerfile es multi-stage o para tests previos)
+      # Paso 2: Configurar Node (Opcional, pero lo mantengo por si lo necesitas para scripts previos)
       - name: Configurar Entorno Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20' 
           
-      # Paso 3: Autenticación Segura en Docker Hub
+      # Paso 3: Login en Docker Hub
       - name: Login en Docker Hub
         uses: docker/login-action@v3
         with:
-          # Se usa la URL del registro si no es la predeterminada, obtenida desde los Secrets
+          # Si usas Docker Hub oficial, 'registry' es opcional, pero no hace daño dejarlo si está en tus secrets
           registry: ${{ secrets.DOCKER_REGISTRY_URL }} 
-          # Credenciales del usuario y el PAT/Token de Acceso
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Paso 4: Definición del Tag Único de la Imagen
-      - name: Definir Tag Único para la Imagen
-        id: image
-        # La ruta completa incluye el repositorio y el SHA del commit como versión
-        run: echo "IMAGE_TAG=enmvnuel/expon.me:${{ github.sha }}" >> $GITHUB_OUTPUT
-        # El SHA es un identificador de commit único, ideal para un despliegue trazable.
+      # Paso 4: Generar los Tags (Esta es la corrección clave)
+      # Esto crea automáticamente dos tags:
+      # 1. enmvnuel/expon.me:latest (Para que Dokploy lo despliegue)
+      # 2. enmvnuel/expon.me:sha-xxxx (Para que tengas historial de versiones)
+      - name: Definir Metadatos de Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: enmvnuel/expon.me
+          tags: |
+            type=raw,value=latest
+            type=sha,format=long
 
-      # Paso 5: Construcción y Subida (Push) de la Imagen
+      # Paso 5: Construir y Subir
       - name: Construir y Subir la Imagen a Docker Hub
         uses: docker/build-push-action@v5
         with:
-          context: . # Usa el directorio actual como contexto de Docker
-          push: true # Indica que debe subir la imagen después de construirla
-          tags: ${{ steps.image.outputs.IMAGE_TAG }} 
-          # Opcional: Caching para acelerar builds subsiguientes
+          context: .
+          push: true
+          # Usamos los tags generados en el paso anterior
+          tags: ${{ steps.meta.outputs.tags }}
+          # Sistema de caché para que las builds sean más rápidas
           cache-from: type=gha 
+          cache-to: type=gha,mode=max
 
-      # Paso 6: Despliegue Continuo (CD) - Notificación a Dokploy
-      - name: Activar Despliegue Continuo en Dokploy
-        # Se establece el Webhook URL como variable de entorno usando el Secret
+      # Paso 6: Notificar a Dokploy
+      - name: Activar Despliegue en Dokploy
         env:
           DOKPLOY_WEBHOOK_URL: ${{ secrets.DOKPLOY_WEBHOOK_URL }}
         run: |
-          echo "Iniciando despliegue de imagen: ${{ steps.image.outputs.IMAGE_TAG }}"
-          
-          # Se usa 'curl' para enviar una solicitud POST al Webhook.
-          # Los Webhooks de despliegue a menudo requieren un método POST.
+          echo "Imagen construida y subida con tag :latest"
+          echo "Enviando webhook a Dokploy..."
           curl -X POST $DOKPLOY_WEBHOOK_URL
