@@ -16,7 +16,7 @@ export default function ConductPage() {
                             Código de Conducta
                         </h1>
                         <p className="mt-6 text-lg leading-8 text-slate-600">
-                            Red Flag es más que una base de datos; es una comunidad. Estas son las reglas que nos mantienen unidos y seguros.
+                            Exponme es más que una base de datos; es una comunidad. Estas son las reglas que nos mantienen unidos y seguros.
                         </p>
                         <div className="mt-4 flex items-center justify-center gap-2 text-sm font-medium text-slate-500">
                             <RefreshCw className="h-4 w-4" />
@@ -96,7 +96,7 @@ export default function ConductPage() {
                                 </div>
                                 <div className="prose prose-slate max-w-none text-slate-600">
                                     <p>
-                                        Queremos ser muy claros: <strong>Red Flag no es un lugar para el odio.</strong> Serás expulsado inmediatamente si participas en:
+                                        Queremos ser muy claros: <strong>Exponme no es un lugar para el odio.</strong> Serás expulsado inmediatamente si participas en:
                                     </p>
                                     <ul className="mt-4 space-y-3">
                                         <li className="flex items-start gap-3 p-3 rounded-xl bg-red-50/50 border border-red-100">

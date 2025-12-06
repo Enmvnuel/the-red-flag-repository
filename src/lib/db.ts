@@ -7,7 +7,9 @@ const globalForPg = globalThis as unknown as {
 
 export const pool = globalForPg.pool ?? new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : undefined,
+  ssl: {
+    rejectUnauthorized: false
+  },
   max: 20, // máximo de conexiones
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,

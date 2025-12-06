@@ -11,11 +11,20 @@ interface DepartmentStatsProps {
         male: number;
         female: number;
     };
+    departmentData?: {
+        totalInfidels: number;
+        menInfidels: number;
+        womenInfidels: number;
+        denuncias: number;
+        edadPromedio: number;
+        edadMinima: number;
+        edadMaxima: number;
+    } | null;
     recentReports: Reporte[];
     onClose: () => void;
 }
 
-export default function DepartmentStats({ regionName, stats, recentReports, onClose }: DepartmentStatsProps) {
+export default function DepartmentStats({ regionName, stats, departmentData, recentReports, onClose }: DepartmentStatsProps) {
     return (
         <motion.div
             initial={{ opacity: 0, x: 20 }}
@@ -61,6 +70,38 @@ export default function DepartmentStats({ regionName, stats, recentReports, onCl
                         <p className="text-2xl font-black text-rose-600">{stats.female}</p>
                     </div>
                 </div>
+
+                {/* Edad Stats - Solo si hay datos del departamento */}
+                {departmentData && (
+                    <div className="p-6 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl border border-indigo-100">
+                        <h3 className="text-sm font-bold text-slate-900 mb-4 flex items-center gap-2">
+                            <Calendar className="w-4 h-4 text-indigo-400" />
+                            Rango de Edades
+                        </h3>
+                        <div className="grid grid-cols-3 gap-3">
+                            <div className="text-center">
+                                <p className="text-xs text-slate-500 font-medium mb-1">Promedio</p>
+                                <p className="text-xl font-black text-indigo-600">{departmentData.edadPromedio}</p>
+                            </div>
+                            <div className="text-center">
+                                <p className="text-xs text-slate-500 font-medium mb-1">Mínima</p>
+                                <p className="text-xl font-black text-slate-600">{departmentData.edadMinima}</p>
+                            </div>
+                            <div className="text-center">
+                                <p className="text-xs text-slate-500 font-medium mb-1">Máxima</p>
+                                <p className="text-xl font-black text-slate-600">{departmentData.edadMaxima}</p>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Total Denuncias */}
+                {departmentData && departmentData.denuncias > 0 && (
+                    <div className="p-4 bg-amber-50 rounded-2xl border border-amber-100 text-center">
+                        <p className="text-xs text-amber-600 font-bold uppercase mb-2">Total Denuncias</p>
+                        <p className="text-3xl font-black text-amber-700">{departmentData.denuncias}</p>
+                    </div>
+                )}
 
                 {/* Recent Reports List */}
                 <div>

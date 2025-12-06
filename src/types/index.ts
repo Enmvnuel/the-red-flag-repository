@@ -1,4 +1,5 @@
 export type Genero = "hombre" | "mujer";
+export type TipoReporte = "infiel" | "cachudo";
 
 export interface Reporte {
   id: string;
@@ -11,5 +12,5 @@ export interface Reporte {
   descripcion: string;
   denuncias: number;
   redSocial?: string;
-  evidencias?: string[];
+  tipoReporte?: TipoReporte;
 }

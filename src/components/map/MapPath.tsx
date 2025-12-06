@@ -8,7 +8,8 @@ interface MapPathProps {
     region: RegionPath;
     isSelected: boolean;
     isHovered: boolean;
-    infidelityRate: number;
+    menInfidels: number;
+    womenInfidels: number;
     onHover: (id: string) => void;
     onLeave: () => void;
     onClick: (id: string) => void;
@@ -18,21 +19,40 @@ function MapPath({
     region,
     isSelected,
     isHovered,
-    infidelityRate,
+    menInfidels,
+    womenInfidels,
     onHover,
     onLeave,
     onClick,
 }: MapPathProps) {
-    // Determine color based on infidelity rate
-    const getFillColor = () => {
-        if (isSelected) return "#e11d48"; // rose-600
-        if (isHovered) return "#fb7185"; // rose-400
+    // Determinar el género predominante
+    const isMaleDominant = menInfidels > womenInfidels;
+    const totalInfidels = menInfidels + womenInfidels;
 
-        // Gradient based on rate
-        if (infidelityRate > 60) return "#f43f5e"; // rose-500
-        if (infidelityRate > 40) return "#fb7185"; // rose-400
-        if (infidelityRate > 20) return "#fda4af"; // rose-300
-        return "#ffe4e6"; // rose-100
+    // Determine color based on gender dominance
+    const getFillColor = () => {
+        if (totalInfidels === 0) return "#f1f5f9"; // slate-100 default
+
+        if (isSelected) {
+            return isMaleDominant ? "#3b82f6" : "#f43f5e"; // blue-500 : rose-500
+        }
+        
+        if (isHovered) {
+            return isMaleDominant ? "#60a5fa" : "#fb7185"; // blue-400 : rose-400
+        }
+
+        // Gradient based on gender and intensity - COLORES SUAVES con más intensidad
+        if (isMaleDominant) {
+            // Colores AZULES con intensidad media
+            if (totalInfidels > 2000) return "#60a5fa"; // blue-400
+            if (totalInfidels > 1000) return "#93c5fd"; // blue-300
+            return "#bfdbfe"; // blue-200
+        } else {
+            // Colores ROSADOS con intensidad media
+            if (totalInfidels > 2000) return "#fb7185"; // rose-400
+            if (totalInfidels > 1000) return "#fda4af"; // rose-300
+            return "#fecdd3"; // rose-200
+        }
     };
 
     return (

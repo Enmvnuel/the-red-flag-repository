@@ -25,7 +25,7 @@ export default function HomePage() {
           <h1 className="mx-auto max-w-5xl text-6xl font-black tracking-tight text-slate-900 sm:text-7xl lg:text-8xl lg:leading-[0.9]">
             ¿Es el indicado o <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-600 to-indigo-600">
-              una Red Flag? 🚩
+              una Infidelidad? 🚩
             </span>
           </h1>
 

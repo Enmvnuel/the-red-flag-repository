@@ -64,7 +64,7 @@ export default function TermsPage() {
                                 </div>
                                 <div className="prose prose-slate max-w-none text-slate-600">
                                     <p>
-                                        Bienvenido a <strong>Red Flag</strong>. Al acceder, navegar o utilizar nuestra plataforma, aceptas estar legalmente vinculado por estos términos. Si no estás de acuerdo con alguna parte de estos términos, te rogamos que no utilices nuestros servicios.
+                                        Bienvenido a <strong>Exponme</strong>. Al acceder, navegar o utilizar nuestra plataforma, aceptas estar legalmente vinculado por estos términos. Si no estás de acuerdo con alguna parte de estos términos, te rogamos que no utilices nuestros servicios.
                                     </p>
                                     <p>
                                         Esta plataforma está diseñada con un propósito claro: <strong>compartir experiencias y verificar antecedentes</strong> para proteger a la comunidad de posibles riesgos en relaciones interpersonales.
@@ -150,7 +150,7 @@ export default function TermsPage() {
                                     </div>
 
                                     <p>
-                                        "Red Flag" actúa como un intermediario pasivo para la distribución de contenido generado por usuarios y no asume responsabilidad por la veracidad de los mismos, aunque nos reservamos el derecho de moderar y eliminar contenido que viole estas normas.
+                                        "Exponme" actúa como un intermediario pasivo para la distribución de contenido generado por usuarios y no asume responsabilidad por la veracidad de los mismos, aunque nos reservamos el derecho de moderar y eliminar contenido que viole estas normas.
                                     </p>
                                 </div>
                             </section>

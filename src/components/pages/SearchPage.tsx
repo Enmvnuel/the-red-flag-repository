@@ -1,25 +1,30 @@
 "use client";
 
 import { useState } from "react";
-import { Search, Filter, MapPin, Calendar, AlertTriangle, User, SearchCheck, X } from "lucide-react";
+import { Search, Filter, MapPin, Calendar, AlertTriangle, User, SearchCheck, X, Heart } from "lucide-react";
 import Link from "next/link";
-import { mockReportes } from "@/data/mockData";
-import type { Genero } from "@/types";
+import { useReportes } from "@/hooks/useDatabase";
+import type { Genero, TipoReporte } from "@/types";
 import CustomSelect from "@/components/ui/CustomSelect";
 
 export default function SearchPage() {
   const [busqueda, setBusqueda] = useState("");
   const [ciudadFiltro, setCiudadFiltro] = useState("");
   const [generoFiltro, setGeneroFiltro] = useState<Genero | "">("");
+  const [tipoFiltro, setTipoFiltro] = useState<TipoReporte | "">("");
+  
+  const { reportes, loading, error } = useReportes();
 
-  const reportesFiltrados = mockReportes.filter((reporte) => {
-    const matchNombre = reporte.nombre.toLowerCase().includes(busqueda.toLowerCase());
+  const reportesFiltrados = reportes.filter((reporte) => {
+    const matchNombre = reporte.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
+                       (reporte.apellido && reporte.apellido.toLowerCase().includes(busqueda.toLowerCase()));
     const matchCiudad = ciudadFiltro === "" || reporte.ciudad === ciudadFiltro;
     const matchGenero = generoFiltro === "" || reporte.genero === generoFiltro;
-    return matchNombre && matchCiudad && matchGenero;
+    const matchTipo = tipoFiltro === "" || reporte.tipoReporte === tipoFiltro;
+    return matchNombre && matchCiudad && matchGenero && matchTipo;
   });
 
-  const ciudades = Array.from(new Set(mockReportes.map((r) => r.ciudad)));
+  const ciudades = Array.from(new Set(reportes.map((r) => r.ciudad)));
   const cityOptions = [
     { value: "", label: "Todas las ciudades" },
     ...ciudades.map((c) => ({ value: c, label: c })),
@@ -77,11 +82,14 @@ export default function SearchPage() {
               />
             </div>
 
-            {/* Gender Toggles */}
+            {/* Gender & Type Toggles */}
             <div className="flex p-1 gap-2 rounded-2xl bg-slate-100/50 ring-1 ring-slate-200">
               <button
-                onClick={() => setGeneroFiltro("")}
-                className={`flex-1 rounded-xl px-4 py-3 text-sm font-bold transition-all duration-200 ${generoFiltro === ""
+                onClick={() => {
+                  setGeneroFiltro("");
+                  setTipoFiltro("");
+                }}
+                className={`flex-1 rounded-xl px-4 py-3 text-sm font-bold transition-all duration-200 ${generoFiltro === "" && tipoFiltro === ""
                     ? "bg-white text-slate-900 shadow-sm ring-1 ring-slate-200"
                     : "text-slate-500 hover:text-slate-700 hover:bg-slate-200/50"
                   }`}
@@ -89,8 +97,11 @@ export default function SearchPage() {
                 Todos
               </button>
               <button
-                onClick={() => setGeneroFiltro("hombre")}
-                className={`flex-1 rounded-xl px-4 py-3 text-sm font-bold transition-all duration-200 ${generoFiltro === "hombre"
+                onClick={() => {
+                  setGeneroFiltro("hombre");
+                  setTipoFiltro("");
+                }}
+                className={`flex-1 rounded-xl px-4 py-3 text-sm font-bold transition-all duration-200 ${generoFiltro === "hombre" && tipoFiltro === ""
                     ? "bg-blue-500 text-white shadow-md shadow-blue-200"
                     : "text-slate-500 hover:text-blue-600 hover:bg-blue-50"
                   }`}
@@ -98,8 +109,23 @@ export default function SearchPage() {
                 Hombres
               </button>
               <button
-                onClick={() => setGeneroFiltro("mujer")}
-                className={`flex-1 rounded-xl px-4 py-3 text-sm font-bold transition-all duration-200 ${generoFiltro === "mujer"
+                onClick={() => {
+                  setGeneroFiltro("");
+                  setTipoFiltro("cachudo");
+                }}
+                className={`flex-1 rounded-xl px-4 py-3 text-sm font-bold transition-all duration-200 ${tipoFiltro === "cachudo"
+                    ? "bg-amber-500 text-white shadow-md shadow-amber-200"
+                    : "text-slate-500 hover:text-amber-600 hover:bg-amber-50"
+                  }`}
+              >
+                Cachudos
+              </button>
+              <button
+                onClick={() => {
+                  setGeneroFiltro("mujer");
+                  setTipoFiltro("");
+                }}
+                className={`flex-1 rounded-xl px-4 py-3 text-sm font-bold transition-all duration-200 ${generoFiltro === "mujer" && tipoFiltro === ""
                     ? "bg-rose-500 text-white shadow-md shadow-rose-200"
                     : "text-slate-500 hover:text-rose-600 hover:bg-rose-50"
                   }`}

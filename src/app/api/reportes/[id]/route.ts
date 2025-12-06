@@ -12,16 +12,19 @@ export async function GET(
 
     if (!reporte) {
       return NextResponse.json(
-        { error: 'Reporte no encontrado' },
+        { success: false, error: 'Reporte no encontrado' },
         { status: 404 }
       )
     }
 
-    return NextResponse.json(reporte)
+    return NextResponse.json({
+      success: true,
+      data: reporte
+    })
   } catch (error) {
     console.error('Error obteniendo reporte:', error)
     return NextResponse.json(
-      { error: 'Error obteniendo reporte' },
+      { success: false, error: 'Error obteniendo reporte' },
       { status: 500 }
     )
   }

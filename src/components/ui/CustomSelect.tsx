@@ -15,7 +15,7 @@ interface CustomSelectProps {
     placeholder?: string;
     icon?: React.ElementType;
     className?: string;
-    accentColor?: "rose" | "blue" | "pink";
+    accentColor?: "rose" | "blue" | "pink" | "amber";
 }
 
 export default function CustomSelect({
@@ -63,6 +63,13 @@ export default function CustomSelect({
             bg: "bg-pink-50",
             hover: "hover:bg-pink-50",
             active: "bg-pink-100 text-pink-700",
+        },
+        amber: {
+            ring: "focus:ring-amber-500",
+            text: "text-amber-600",
+            bg: "bg-amber-50",
+            hover: "hover:bg-amber-50",
+            active: "bg-amber-100 text-amber-700",
         },
     };
 
